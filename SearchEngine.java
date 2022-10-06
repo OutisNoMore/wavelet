@@ -18,9 +18,13 @@ class Handler implements URLHandler {
     private String getStrings(){
       String output = "";
       for(String s : strings){
-        output += "\"" + s + "\", ";
+        if(s.equals(strings.get(strings.size()-1))){
+          output += "\"" + s + "\"\n";
+        }
+        else{
+          output += "\"" + s + "\", ";
+        }
       }
-      output += "\n";
       return output;
     }
 
@@ -42,13 +46,13 @@ class Handler implements URLHandler {
         else if(url.getPath().contains("search")){
             String[] parameters = url.getQuery().split("=");  // get all queries
             if(parameters[0].equals("s")){
-              output = String.format("Searching for %s:\n", parameters[1]);
-              String param = parameters[1].substring(1, parameters[1].length() - 1); // ignore quotes
+              output = String.format("Searching for %s:\nFound: ", parameters[1]);
               for(String s : strings){
-                if(s.contains(param)){
-                  output += s + "\n";
+                if(s.contains(parameters[1])){
+                  output += s + ", ";
                 }
               }
+              output = output.substring(0, output.length() - 2);
             }
         }
         // Invalid url
